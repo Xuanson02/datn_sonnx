@@ -11,6 +11,7 @@ export const HeaderContext = createContext();
 var token = localStorage.getItem("token");
 function Header (){
     var [numCart, setNumCart] = useState(0);
+    var [categories, setCategories] = useState([]);
 
     useEffect(()=>{
         const getNumCart = async() =>{
@@ -25,6 +26,13 @@ function Header (){
         if(token != null){
             getNumCart();
         }
+
+        const getCategory = async() =>{
+            const response = await getMethodByToken('http://localhost:8080/api/parent-category/public/all');
+            var result = await response.json();
+            setCategories(result);
+        };
+        getCategory()
     }, []);
     
 
@@ -46,9 +54,24 @@ function Header (){
         <div class="subheader">
             <div class="container subcontainerheader">
                 <ul>
+                    <li><a href="/gioi-thieu-cong-ty">Giới thiệu</a></li>
                     <li><a href="/blog">Bài viết</a></li>
-                    <li><a href="">Địa chỉ cửa hàng</a></li>
-                    <li><a href="/kiemtradonhang">Tra cứu đơn hàng</a></li>
+                    {/* Thêm dropdown danh mục vào đây */}
+                    {categories.map((parent) => (
+                         <li class="dropdown">
+                            <a href="#">{parent.name} <i class="fa fa-angle-down"></i></a>
+                            <ul class="dropdown-menu">
+                                {parent.categories.map((child) => (
+                                <li key={child.id} class="dropdown-submenu">
+                                    <a href={`/product?category=${child.id}&catename=${child.name}`}>{child.name}</a>
+                                </li>
+                                ))}
+                            </ul>
+                        </li>
+                    ))}
+
+                    <li><a href="/he-thong-cua-hang">Địa chỉ cửa hàng</a></li>
+                    <li><a href="/account">Tra cứu đơn hàng</a></li>
                     {authen}
                 </ul>
             </div>

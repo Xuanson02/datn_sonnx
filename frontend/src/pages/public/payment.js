@@ -33,6 +33,7 @@ async function createInvoice() {
         document.getElementById("thanhcong").style.display = 'none'
         document.getElementById("errormess").innerHTML = result.defaultMessage
     }
+
 }
 
     // $( document ).ready(function() {

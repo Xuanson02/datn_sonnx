@@ -102,13 +102,7 @@ function PublicCart(){
             window.open(result.url, '_blank');
         }
         else{
-            if(res.status == 417){
-                var result = await res.json();
-                toast.error(result.defaultMessage);
-            }
-            else{
-                toast.error("Momo đang gặp lỗi, không thể thanh toán");
-            }
+            toast.error("Momo đang gặp lỗi, không thể thanh toán");
         }
     }
 
@@ -131,13 +125,7 @@ function PublicCart(){
             });
         }
         else{
-            if(res.status == 417){
-                var result = await res.json();
-                toast.error(result.defaultMessage);
-            }
-            else{
-                toast.error("Đặt hàng thất bại");
-            }
+            toast.error("Đặt hàng thất bại");
         }
     }
     
@@ -252,19 +240,19 @@ function PublicCart(){
                         <div className='col-sm-6'>
                             <span class="titlecheckout">Loại hình thanh toán</span>
                             <table class="table table-bordered">
+                                <tr onclick="momo.click()">
+                                    <td><label class="radiocustom">
+                                            <input value="momo" id="momo" type="radio" name="paytype" checked/>
+                                            <span class="checkmark"></span></label></td>
+                                    <td><label for="momo">Thanh toán qua Ví MoMo</label></td>
+                                    <td><img src={momo} class="momopay"/></td>
+                                </tr>
 
                                 <tr onclick="code.click()">
                                     <td><label class="radiocustom">
                                             <input value="cod" id="code" type="radio" name="paytype"/>
                                             <span class="checkmark"></span></label></td>
                                     <td><label for="code">Thanh toán khi nhận hàng (COD)</label></td>
-                                    <td><i class="fa fa-money paycode"></i></td>
-                                </tr>
-                                <tr onclick="code.click()">
-                                    <td><label class="radiocustom">
-                                            <input value="momo" id="momo" type="radio" name="paytype"/>
-                                            <span class="checkmark"></span></label></td>
-                                    <td><label for="code">Thanh toán qua momo</label></td>
                                     <td><i class="fa fa-money paycode"></i></td>
                                 </tr>
                             </table>

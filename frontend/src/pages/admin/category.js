@@ -22,7 +22,10 @@ async function saveCategory(event) {
         id: event.target.elements.idcate.value,
         name: event.target.elements.catename.value,
         image: imgbanner,
+        parentCategory: {id: event.target.elements.danhmuccha.value},
     };
+    console.log(payload);
+    
     const res = await fetch('http://localhost:8080/api/category/admin/create', {
         method: 'POST',
         headers: new Headers({
@@ -46,6 +49,8 @@ async function saveCategory(event) {
 const AdminCateory = ()=>{
     const [items, setItems] = useState([]);
     const [cate, setCate] = useState(null);
+    const [parentCate, setParentCate] = useState([]);
+    const [parentCateSelect, setparentCateSelect] = useState(null);
     useEffect(()=>{
         const getCategrory = async() =>{
             var response = await getMethodByToken("http://localhost:8080/api/category/public/findAll");
@@ -53,6 +58,12 @@ const AdminCateory = ()=>{
             setItems(list)
         };
         getCategrory();
+        const getParentCategrory = async() =>{
+            var response = await getMethodByToken("http://localhost:8080/api/parent-category/public/all");
+            var list = await response.json();
+            setParentCate(list)
+        };
+        getParentCategrory();
     }, []);
 
     $( document ).ready(function() {
@@ -95,6 +106,7 @@ const AdminCateory = ()=>{
         var result = await response.json();
         imgbanner = result.image
         setCate(result)
+        setparentCateSelect(result.parentCategory)
     }
 
     function clearInput(){
@@ -122,6 +134,7 @@ const AdminCateory = ()=>{
                                 <th>id</th>
                                 <th>Ảnh</th>
                                 <th>Tên danh mục</th>
+                                <th>Danh mục cha</th>
                                 <th class="sticky-col">Hành động</th>
                             </tr>
                         </thead>
@@ -131,6 +144,7 @@ const AdminCateory = ()=>{
                                     <td>{item.id}</td>
                                     <td><img src={item.image} className='imgadmin'/></td>
                                     <td>{item.name}</td>
+                                    <td>{item.parentName}</td>
                                     <td class="sticky-col">
                                         <i onClick={()=>deleteCategory(item.id)} class="fa fa-trash iconaction"></i>
                                         <a onClick={()=>loadACategory(item.id)} data-bs-toggle="modal" data-bs-target="#themdanhmuc"><i class="fa fa-edit iconaction"></i></a>
@@ -151,6 +165,13 @@ const AdminCateory = ()=>{
                         <input defaultValue={cate==null?'':cate.id} name="idcate" id='idcate' type="hidden" />
                         <label>Tên danh mục</label>
                         <input defaultValue={cate==null?'':cate.name} name="catename" id='catename' type="text" class="form-control" />
+                        <label>Danh mục cha</label>
+                        <select name="danhmuccha" class="form-control">
+                            {parentCate.map((item=>{
+                                var s = parentCateSelect==null?'':'selected'
+                                return <option selected={s} value={item.id}>{item.name}</option>
+                            }))}
+                        </select>
                         <label>Ảnh</label>
                         <input id='fileimage' name="fileimage" type="file" class="form-control" />
                         <img src={cate==null?'':cate.image} id="imgpreview" className='imgadmin'/>

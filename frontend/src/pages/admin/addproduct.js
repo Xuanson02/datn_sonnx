@@ -163,7 +163,7 @@ const AdminAddProduct = ()=>{
                             <div class="col-md-8 col-sm-12 col-12">
                                 <label class="lb-form">Ảnh nền</label>
                                 <input id="imgbanner" type="file" class="form-control"/>
-                                <img src={product==null?'':product.imageBanner} id="imgpreproduct" className='imgadmin'/>
+                                <img src={product==null?'':product.image} id="imgpreproduct" className='imgadmin'/>
                                 <br/><br/><label class="lb-form">Ảnh phụ</label>
                                 <input accept="image/*" onChange={()=>previewImages()} id="choosefile" multiple type="file" className='hidden'/>
                                 <div class="row">
