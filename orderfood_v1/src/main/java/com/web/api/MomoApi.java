@@ -4,22 +4,18 @@ import com.web.constants.LogUtils;
 import com.web.constants.RequestType;
 import com.web.dto.request.PaymentDto;
 import com.web.dto.response.ResponsePayment;
-import com.web.entity.Cart;
 import com.web.entity.Voucher;
 import com.web.exception.MessageException;
 import com.web.models.PaymentResponse;
 import com.web.models.QueryStatusTransactionResponse;
 import com.web.processor.CreateOrderMoMo;
 import com.web.processor.QueryTransactionStatus;
-import com.web.repository.CartRepository;
 import com.web.repository.VoucherRepository;
 import com.web.service.CartService;
-import com.web.utils.UserUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
-import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -33,22 +29,11 @@ public class MomoApi {
     @Autowired
     private VoucherRepository voucherRepository;
 
-    @Autowired
-    private CartRepository cartRepository;
-
-    @Autowired
-    private UserUtils userUtils;
-
     @PostMapping("/urlpayment")
     public ResponsePayment getUrlPayment(@RequestBody PaymentDto paymentDto){
         LogUtils.init();
         Double totalAmount = cartService.totalAmountCart();
-        List<Cart> carts = cartRepository.findByUser(userUtils.getUserWithAuthority().getId());
-        for(Cart c : carts){
-            if(c.getQuantity() > c.getProduct().getQuantity()){
-                throw new MessageException("Sản phẩm "+c.getProduct().getName()+" chỉ còn "+c.getProduct().getQuantity()+" sản phẩm");
-            }
-        }
+
         if(paymentDto.getCodeVoucher() != null){
             Optional<Voucher> voucher = findVoucherByCode(paymentDto.getCodeVoucher(), totalAmount);
             if(voucher.isPresent()){

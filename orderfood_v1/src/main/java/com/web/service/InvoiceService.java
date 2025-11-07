@@ -54,9 +54,6 @@ public class InvoiceService {
         User user = userUtils.getUserWithAuthority();
         for(Cart p : cartRepository.findByUser(user.getId())){
             totalAmount += p.getProduct().getPrice() * p.getQuantity();
-            if(p.getQuantity() > p.getProduct().getQuantity()){
-                throw new MessageException("Sản phẩm "+p.getProduct().getName()+" chỉ còn "+p.getProduct().getQuantity()+" sản phẩm");
-            }
         }
         if(invoiceRequest.getPayType().equals(PayType.MOMO)){
             if(historyPayRepository.findByOrderIdAndRequestId(invoiceRequest.getOrderIdMomo(), invoiceRequest.getRequestIdMomo()).isPresent()){
@@ -106,11 +103,6 @@ public class InvoiceService {
                 p.getProduct().setQuantitySold(0);
             }
             p.getProduct().setQuantitySold(p.getProduct().getQuantitySold() + p.getQuantity());
-        }
-
-        for(Cart c : cartRepository.findByUser(user.getId())){
-            c.getProduct().setQuantity(c.getProduct().getQuantity() - c.getQuantity());
-            productRepository.save(c.getProduct());
         }
 
         if(invoiceRequest.getPayType().equals(PayType.MOMO)){

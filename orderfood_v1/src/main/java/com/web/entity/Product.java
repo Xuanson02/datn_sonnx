@@ -39,8 +39,6 @@ public class Product {
 
     private Boolean deleted = false;
 
-    private Integer quantity;
-
     @ManyToOne
     @JoinColumn(name = "category_id")
     private Category category;

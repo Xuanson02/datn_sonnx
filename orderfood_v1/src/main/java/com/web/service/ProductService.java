@@ -40,14 +40,9 @@ public class ProductService {
         Product product = productRequest.getProduct();
         product.setQuantitySold(0);
         product.setDeleted(false);
-        product.setQuantity(0);
         if(product.getId() != null){
             Product p = productRepository.findById(product.getId()).get();
             product.setQuantitySold(p.getQuantitySold());
-            product.setQuantity(p.getQuantity());
-            if(p.getQuantity() == null){
-                product.setQuantity(0);
-            }
         }
         Product result = productRepository.save(product);
         for (String link : productRequest.getLinkLinkImages()) {

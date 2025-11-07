@@ -1,5 +1,6 @@
 package com.web.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -19,4 +20,22 @@ public class Category {
     private String name;
 
     private String image;
+
+    @Transient
+    private Long idParent;
+
+    @Transient
+    private String parentName;
+
+    @ManyToOne
+    @JsonBackReference
+    private ParentCategory parentCategory;
+
+    public Long getIdParent() {
+        return this.parentCategory != null ? this.parentCategory.getId() : null;
+    }
+
+    public String getParentName() {
+        return this.parentCategory != null ? this.parentCategory.getName() : null;
+    }
 }
